@@ -9,4 +9,4 @@ app.use(cors());
 app.use(require("./routes/routes"));
 
 app.use(require("./helpers/response.helper").errorHandler);
-app.listen(3000, () => console.log("Server started on port 3000"));
+app.listen(80, () => console.log("Server started on port 80"));
