@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-require("./helpers/exception.helper")(); // handle async error
+const mongodb = require("mongodb").require("./helpers/exception.helper")(); // handle async error
 
 const app = express();
 app.use(express.json());
