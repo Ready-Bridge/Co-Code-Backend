@@ -1,9 +1,9 @@
 const { HttpResponse } = require("../helpers/response.helper");
 
 const authPing = () => {
-  setTimeout(() => {}, 10000);
-
-  return new HttpResponse(200, "pong");
+  setTimeout(() => {
+    return new HttpResponse(200, "pong");
+  }, 10000);
 };
 
 module.exports = {
