@@ -1,9 +1,23 @@
 const { HttpResponse } = require("../helpers/response.helper");
 const bcrypt = require("bcrypt");
+const { generateRandomNumber, sendEmail } = require("../helpers/email.helper");
 const { userModel } = require("../schemas/user.schema");
 
 const authPing = () => {
   return new HttpResponse(200, "pong");
+};
+
+const code = async (email) => {
+  const code = generateRandomNumber(6);
+  sendEmail(email, code);
+
+  try {
+    await userModel.updateOne({ email: email }, { code: code });
+  } catch (err) {
+    throw err;
+  }
+
+  return new HttpResponse(201, code);
 };
 
 const join = async (userId, password, nickname, email) => {
@@ -19,7 +33,6 @@ const join = async (userId, password, nickname, email) => {
 
     return new HttpResponse(201, "REGISTER_SUCCESS");
   } catch (err) {
-    console.log(err);
     if (err.code === 11000) {
       // 중복 키 에러 확인
       return new HttpResponse(400, "USER_ALREADY_EXISTS");
@@ -31,4 +44,5 @@ const join = async (userId, password, nickname, email) => {
 module.exports = {
   authPing,
   join,
+  code,
 };
