@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
-const config = require("../../../Co-Code-Backend/src/configs");
+const dotenv = require("dotenv");
+dotenv.config();
+const { JWT_SECRET } = process.env;
 
 const middleware = (req, res, next) => {
   let token = req.headers["authorization"];
@@ -9,7 +11,7 @@ const middleware = (req, res, next) => {
     });
   }
   token = token.split(" ")[1] ?? "";
-  jwt.verify(token, config.auth.Key, (err, decoded) => {
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err || !decoded.id || !decoded.username) {
       return res.status(401).json({
         message: "Unauthorized",
@@ -21,7 +23,7 @@ const middleware = (req, res, next) => {
 };
 
 const genToken = (user) => {
-  return jwt.sign(user, config.auth.Key, {
+  return jwt.sign(user, JWT_SECRET, {
     expiresIn: "1d",
   });
 };

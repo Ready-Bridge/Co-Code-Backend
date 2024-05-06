@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authController = require(`../controllers/auth.controller`);
 
-router.post("/login", authController.authPing); // 로그인
+router.post("/login", authController.login); // 로그인
 router.get("/logout", authController.authPing); // 로그아웃
 router.post("/join", authController.join); // 회원가입
 router.post("/code", authController.code); // 이메일 인증 코드 전송

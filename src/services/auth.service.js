@@ -1,5 +1,6 @@
 const { HttpResponse } = require("../helpers/response.helper");
 const bcrypt = require("bcrypt");
+const authHelper = require("../helpers/auth.helper");
 const { generateRandomNumber, sendEmail } = require("../helpers/email.helper");
 const { userModel } = require("../schemas/user.schema");
 
@@ -7,17 +8,28 @@ const authPing = () => {
   return new HttpResponse(200, "pong");
 };
 
+const login = async (userId, password) => {
+  let user = await userModel.findOne({ userId: userId });
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return new HttpResponse(401, "WRONG_USER_INFO");
+  }
+  return new HttpResponse(200, {
+    token: authHelper.genToken({
+      id: user.userId,
+      nickname: user.nickname,
+      email: user.email,
+    }),
+  });
+};
+
 const code = async (email) => {
   const code = generateRandomNumber(6);
-  sendEmail(email, code);
-
   try {
-    await userModel.updateOne({ email: email }, { code: code });
+    sendEmail(email, code);
+    return new HttpResponse(201, code);
   } catch (err) {
     throw err;
   }
-
-  return new HttpResponse(201, code);
 };
 
 const join = async (userId, password, nickname, email) => {
@@ -45,4 +57,5 @@ module.exports = {
   authPing,
   join,
   code,
+  login,
 };
