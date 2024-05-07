@@ -15,7 +15,7 @@ const login = async (userId, password) => {
   }
   return new HttpResponse(200, {
     token: authHelper.genToken({
-      id: user.userId,
+      userId: user.userId,
       nickname: user.nickname,
       email: user.email,
     }),

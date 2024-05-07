@@ -12,7 +12,7 @@ const middleware = (req, res, next) => {
   }
   token = token.split(" ")[1] ?? "";
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err || !decoded.id || !decoded.username) {
+    if (err || !decoded.userId || !decoded.nickname || !decoded.email) {
       return res.status(401).json({
         message: "Unauthorized",
       });

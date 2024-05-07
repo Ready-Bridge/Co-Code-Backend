@@ -27,8 +27,12 @@ const join = async (req, res, next) => {
   next(await authService.join(userId, password, nickname, email));
 };
 
+const codeValidator = makeValidator({
+  email: ["string"],
+});
+
 const code = async (req, res, next) => {
-  let { email } = req.body;
+  let { email } = codeValidator(req.body);
   next(await authService.code(email));
 };
 
