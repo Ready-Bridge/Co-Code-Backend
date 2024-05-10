@@ -7,6 +7,7 @@ const middleware = (req, res, next) => {
   let token = req.headers["authorization"];
   console.log(token);
   if (!token) {
+    console.log("Here")
     return res.status(401).json({
       message: "Unauthorized",
     });
