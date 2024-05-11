@@ -83,6 +83,18 @@ const changePw = async (email, password) => {
   }
 };
 
+const deleteId = async (email) => {
+  try {
+    const result = await userModel.deleteOne({ email: email });
+    if (result.deletedCount === 0) {
+      return new HttpResponse(400, "USER_NOT_EXISTS");
+    }
+    return new HttpResponse(200, "DELETE_ID_SUCCESS");
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   authPing,
   join,
@@ -90,4 +102,5 @@ module.exports = {
   login,
   findId,
   changePw,
+  deleteId,
 };

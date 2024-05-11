@@ -75,6 +75,19 @@ const changePw = async (req, res, next) => {
   }
 };
 
+const deleteIdValidator = makeValidator({
+  email: ["string"],
+});
+
+const deleteId = async (req, res, next) => {
+  try {
+    let { email } = deleteIdValidator(req.body);
+    next(await authService.deleteId(email));
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   authPing,
   join,
@@ -82,4 +95,5 @@ module.exports = {
   login,
   findId,
   changePw,
+  deleteId,
 };
