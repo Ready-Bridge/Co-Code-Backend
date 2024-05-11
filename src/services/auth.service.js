@@ -22,7 +22,7 @@ const login = async (userId, password) => {
   });
 };
 
-const code = async (email) => {
+const code = (email) => {
   const code = generateRandomNumber(6);
   try {
     sendEmail(email, code);
@@ -53,9 +53,22 @@ const join = async (userId, password, nickname, email) => {
   }
 };
 
+const findId = async (email) => {
+  try {
+    const User = await userModel.findOne({ email });
+    if (!User) {
+      return new HttpResponse(400, "USER_NOT_FOUND");
+    }
+    return new HttpResponse(200, User["userId"]);
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   authPing,
   join,
   code,
   login,
+  findId,
 };
