@@ -65,10 +65,29 @@ const findId = async (email) => {
   }
 };
 
+const changePw = async (email, password) => {
+  try {
+    let oldPassword = await userModel.findOne({ email: email });
+    oldPassword = oldPassword.password;
+    console.log(oldPassword);
+    if (bcrypt.compare(password, oldPassword)) {
+      return new HttpResponse(400, "SAME_PASSWORD");
+    }
+    await userModel.updateOne(
+      { email: email },
+      { password: await bcrypt.hash(password, 10) }
+    );
+    return new HttpResponse(200, "CHANGE_PW_SUCCESS");
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   authPing,
   join,
   code,
   login,
   findId,
+  changePw,
 };

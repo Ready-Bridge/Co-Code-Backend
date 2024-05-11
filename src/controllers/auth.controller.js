@@ -61,10 +61,25 @@ const findId = async (req, res, next) => {
   }
 };
 
+const changePwValidator = makeValidator({
+  email: ["string"],
+  password: ["string"],
+});
+
+const changePw = async (req, res, next) => {
+  try {
+    let { email, password } = changePwValidator(req.body);
+    next(await authService.changePw(email, password));
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   authPing,
   join,
   code,
   login,
   findId,
+  changePw,
 };
