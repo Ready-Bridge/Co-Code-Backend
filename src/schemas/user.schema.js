@@ -20,6 +20,22 @@ const userSchema = new mongoose.Schema({
     maxlength: 45,
     unique: true,
   },
+  profile: {
+    type: Number,
+    default: 0,
+  },
+  background: {
+    type: Number,
+    default: 0,
+  },
+  money: {
+    type: Number,
+    default: 0,
+  },
+  item: {
+    type: Array,
+    default: [],
+  },
 });
 
 const userModel = mongoose.model("User", userSchema);
