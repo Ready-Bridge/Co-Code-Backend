@@ -10,7 +10,11 @@ const authPing = () => {
 
 const login = async (userId, password) => {
   let user = await userModel.findOne({ userId: userId });
+
   if (!user || !(await bcrypt.compare(password, user.password))) {
+    console.log(password);
+    console.log(user.password);
+
     return new HttpResponse(401, "WRONG_USER_INFO");
   }
   return new HttpResponse(200, {
@@ -67,10 +71,9 @@ const findId = async (email) => {
 
 const changePw = async (email, password) => {
   try {
-    let oldPassword = await userModel.findOne({ email: email });
-    oldPassword = oldPassword.password;
-    console.log(oldPassword);
-    if (bcrypt.compare(password, oldPassword)) {
+    let user = await userModel.findOne({ email: email });
+    oldPassword = user.password;
+    if (await bcrypt.compare(password, oldPassword)) {
       return new HttpResponse(400, "SAME_PASSWORD");
     }
     await userModel.updateOne(
@@ -83,8 +86,11 @@ const changePw = async (email, password) => {
   }
 };
 
-const deleteId = async (email) => {
+const deleteId = async (currentEmail, email) => {
   try {
+    if (currentEmail != email) {
+      return new HttpResponse(401, "Unauthorized"); // 로그인한 이메일이 아닌 경우
+    }
     const result = await userModel.deleteOne({ email: email });
     if (result.deletedCount === 0) {
       return new HttpResponse(400, "USER_NOT_EXISTS");

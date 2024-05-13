@@ -82,7 +82,7 @@ const deleteIdValidator = makeValidator({
 const deleteId = async (req, res, next) => {
   try {
     let { email } = deleteIdValidator(req.body);
-    next(await authService.deleteId(email));
+    next(await authService.deleteId(req.user.email, email));
   } catch (err) {
     next(err);
   }
