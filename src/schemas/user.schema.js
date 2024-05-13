@@ -21,11 +21,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   profile: {
-    type: Number,
+    type: String,
     default: 0,
   },
   background: {
-    type: Number,
+    type: String,
     default: 0,
   },
   money: {
