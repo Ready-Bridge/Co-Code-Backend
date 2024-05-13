@@ -22,7 +22,7 @@ const login = async (userId, password) => {
   });
 };
 
-const code = async (email) => {
+const code = (email) => {
   const code = generateRandomNumber(6);
   try {
     sendEmail(email, code);
@@ -53,9 +53,54 @@ const join = async (userId, password, nickname, email) => {
   }
 };
 
+const findId = async (email) => {
+  try {
+    const User = await userModel.findOne({ email });
+    if (!User) {
+      return new HttpResponse(400, "USER_NOT_FOUND");
+    }
+    return new HttpResponse(200, User["userId"]);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const changePw = async (email, password) => {
+  try {
+    let oldPassword = await userModel.findOne({ email: email });
+    oldPassword = oldPassword.password;
+    console.log(oldPassword);
+    if (bcrypt.compare(password, oldPassword)) {
+      return new HttpResponse(400, "SAME_PASSWORD");
+    }
+    await userModel.updateOne(
+      { email: email },
+      { password: await bcrypt.hash(password, 10) }
+    );
+    return new HttpResponse(200, "CHANGE_PW_SUCCESS");
+  } catch (err) {
+    throw err;
+  }
+};
+
+const deleteId = async (email) => {
+  try {
+    const result = await userModel.deleteOne({ email: email });
+    if (result.deletedCount === 0) {
+      return new HttpResponse(400, "USER_NOT_EXISTS");
+    }
+    return new HttpResponse(200, "DELETE_ID_SUCCESS");
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   authPing,
   join,
   code,
   login,
+  findId,
+  changePw,
+  deleteId,
 };
