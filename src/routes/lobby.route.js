@@ -3,7 +3,7 @@ const router = express.Router();
 const lobbyController = require("../controllers/lobby.controller");
 const { middleware } = require("../helpers/auth.helper");
 
-router.get("/api/lobby/profile", middleware, lobbyController.profile);
+router.get("/profile", middleware, lobbyController.profile);
 router.post("/qa", lobbyController.lobbyPing);
 router.get("/qa", lobbyController.lobbyPing);
 router.get("/search", lobbyController.lobbyPing);
