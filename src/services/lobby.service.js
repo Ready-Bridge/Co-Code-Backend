@@ -6,7 +6,7 @@ const lobbyPing = () => {
 };
 
 const profile = async ( userId ) => {
-  const user = userModel.findOne({ userId: userId });
+  const user = await userModel.findOne({ userId: userId });
   const { nickname, profile, background, item } = user
 
   return new HttpResponse(200, {
