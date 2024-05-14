@@ -19,13 +19,26 @@ const profile = async ( userId ) => {
     });
 
   } catch (err) {
-    console.log(err);
     throw err;
   }
+};
 
+const shop = async ( userId ) => {
+  try{
+    const user = await userModel.findOne({ userId: userId });
+    const { money, item } = user;
+
+    return new HttpResponse(200, {
+      money: money,
+      item: item,
+    })
+  } catch (err) {
+    throw err;
+  }
 };
 
 module.exports = {
   lobbyPing,
-  profile
+  profile,
+  shop,
 };
