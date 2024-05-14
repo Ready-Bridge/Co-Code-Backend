@@ -5,11 +5,8 @@ const lobbyPing = () => {
   return new HttpResponse(200, "pong");
 };
 
-const profile = async ( userId ) => {
+const profile =  ( userId ) => {
   try{
-    const user = await userModel.findOne({ userId: userId });
-
-    console.log(user);
 
     return new HttpResponse(200, "hi");
 
