@@ -7,6 +7,11 @@ const lobbyPing = () => {
 
 const profile = async ( userId ) => {
   const user = await userModel.findOne({ userId: userId });
+
+  if (!user) {
+    return new HttpResponse(400, "USER_NOT_EXISTS");
+  }
+
   const { nickname, profile, background, item } = user
 
   return new HttpResponse(200, {
