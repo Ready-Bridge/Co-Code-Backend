@@ -12,9 +12,6 @@ const login = async (userId, password) => {
   let user = await userModel.findOne({ userId: userId });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    console.log(password);
-    console.log(user.password);
-
     return new HttpResponse(401, "WRONG_USER_INFO");
   }
   return new HttpResponse(200, {
@@ -36,6 +33,18 @@ const code = (email) => {
   }
 };
 
+const checkJoin = async (userId, nickname, password, email) => {
+  if (
+    (await userModel.findOne({ userId: userId })) ||
+    (await userModel.findOne({ nickname: nickname })) ||
+    (await userModel.findOne({ email: email }))
+  ) {
+    return new HttpResponse(400, "USER_ALREADY_EXISTS");
+  }
+
+  return new HttpResponse(200, "AVAILABLE_USER_INFO");
+};
+
 const join = async (userId, password, nickname, email) => {
   try {
     const User = new userModel({
@@ -49,10 +58,6 @@ const join = async (userId, password, nickname, email) => {
 
     return new HttpResponse(201, "REGISTER_SUCCESS");
   } catch (err) {
-    if (err.code === 11000) {
-      // 중복 키 에러 확인
-      return new HttpResponse(400, "USER_ALREADY_EXISTS");
-    }
     throw err;
   }
 };
@@ -86,11 +91,8 @@ const changePw = async (email, password) => {
   }
 };
 
-const deleteId = async (currentEmail, email) => {
+const deleteId = async (email) => {
   try {
-    if (currentEmail != email) {
-      return new HttpResponse(401, "Unauthorized"); // 로그인한 이메일이 아닌 경우
-    }
     const result = await userModel.deleteOne({ email: email });
     if (result.deletedCount === 0) {
       return new HttpResponse(400, "USER_NOT_EXISTS");
@@ -104,6 +106,7 @@ const deleteId = async (currentEmail, email) => {
 module.exports = {
   authPing,
   join,
+  checkJoin,
   code,
   login,
   findId,
