@@ -11,7 +11,7 @@ const profile = async ( userId ) => {
 
     console.log(user);
 
-    return new HttpResponse(400, user);
+    return new HttpResponse(200, user);
 
     // const { nickname, profile, background, item } = user;
 
