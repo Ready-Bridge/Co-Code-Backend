@@ -6,18 +6,39 @@ const lobbyPing = () => {
 };
 
 const profile = async ( userId ) => {
-  const user = userModel.findOne({ userId: userId });
-  const { nickname, profile, background, item } = user
+  try{
+    const user = await userModel.findOne({ userId: userId });
 
-  return new HttpResponse(200, {
-    nickname: nickname,
-    profile: profile,
-    background: background,
-    item: item,
-  })
+    const { nickname, profile, background, item } = user;
+
+    return new HttpResponse(200, {
+      nickname: nickname,
+      profile: profile,
+      background: background,
+      item: item,
+    });
+
+  } catch (err) {
+    throw err;
+  }
+};
+
+const shop = async ( userId ) => {
+  try{
+    const user = await userModel.findOne({ userId: userId });
+    const { money, item } = user;
+
+    return new HttpResponse(200, {
+      money: money,
+      item: item,
+    })
+  } catch (err) {
+    throw err;
+  }
 };
 
 module.exports = {
   lobbyPing,
-  profile
+  profile,
+  shop,
 };
