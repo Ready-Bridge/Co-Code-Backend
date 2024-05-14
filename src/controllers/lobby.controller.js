@@ -4,9 +4,9 @@ const lobbyPing = (req, res, next) => {
   next(lobbyService.lobbyPing());
 };
 
-const profile = (req, res, next) => {
+const profile = async (req, res, next) => {
   const { userId } = req.user;
-  next(lobbyService.profile(userId));
+  next(await lobbyService.profile(userId));
 };
 
 
