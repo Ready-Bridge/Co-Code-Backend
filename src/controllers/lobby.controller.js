@@ -9,6 +9,13 @@ const profile = async (req, res, next) => {
   next(await lobbyService.profile(userId));
 };
 
+const profileEdit = async (req, res, next) => {
+  const { userId } = req.user;
+  const { profileId, backgroundId } = req.body;
+
+  next(await lobbyService.profileEdit(userId, profileId, backgroundId));
+}
+
 const shop = async (req, res, next) => {
   const { userId } = req.user;
   next(await lobbyService.shop(userId));
@@ -19,5 +26,6 @@ const shop = async (req, res, next) => {
 module.exports = {
   lobbyPing,
   profile,
+  profileEdit,
   shop,
 };

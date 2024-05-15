@@ -17,11 +17,26 @@ const profile = async ( userId ) => {
       background: background,
       item: item,
     });
-
   } catch (err) {
     throw err;
   }
 };
+
+const profileEdit = async (userId, profileId, backgroundId) => {
+  try {
+    await userModel.updateOne(
+        { userId: userId },
+        {
+          profile: profileId,
+          background: backgroundId,
+        }
+    );
+
+    return new HttpResponse(200, 'profileEdit Success');
+  } catch (err) {
+    throw err;
+  }
+}
 
 const shop = async ( userId ) => {
   try{
@@ -40,5 +55,6 @@ const shop = async ( userId ) => {
 module.exports = {
   lobbyPing,
   profile,
+  profileEdit,
   shop,
 };
