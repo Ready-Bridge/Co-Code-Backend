@@ -10,6 +10,7 @@ const authPing = () => {
 
 const login = async (userId, password) => {
   let user = await userModel.findOne({ userId: userId });
+
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return new HttpResponse(401, "WRONG_USER_INFO");
   }
@@ -32,6 +33,18 @@ const code = (email) => {
   }
 };
 
+const checkJoin = async (userId, nickname, password, email) => {
+  if (
+    (await userModel.findOne({ userId: userId })) ||
+    (await userModel.findOne({ nickname: nickname })) ||
+    (await userModel.findOne({ email: email }))
+  ) {
+    return new HttpResponse(400, "USER_ALREADY_EXISTS");
+  }
+
+  return new HttpResponse(200, "AVAILABLE_USER_INFO");
+};
+
 const join = async (userId, password, nickname, email) => {
   try {
     const User = new userModel({
@@ -45,10 +58,6 @@ const join = async (userId, password, nickname, email) => {
 
     return new HttpResponse(201, "REGISTER_SUCCESS");
   } catch (err) {
-    if (err.code === 11000) {
-      // 중복 키 에러 확인
-      return new HttpResponse(400, "USER_ALREADY_EXISTS");
-    }
     throw err;
   }
 };
@@ -67,10 +76,9 @@ const findId = async (email) => {
 
 const changePw = async (email, password) => {
   try {
-    let oldPassword = await userModel.findOne({ email: email });
-    oldPassword = oldPassword.password;
-    console.log(oldPassword);
-    if (bcrypt.compare(password, oldPassword)) {
+    let user = await userModel.findOne({ email: email });
+    oldPassword = user.password;
+    if (await bcrypt.compare(password, oldPassword)) {
       return new HttpResponse(400, "SAME_PASSWORD");
     }
     await userModel.updateOne(
@@ -98,6 +106,7 @@ const deleteId = async (email) => {
 module.exports = {
   authPing,
   join,
+  checkJoin,
   code,
   login,
   findId,

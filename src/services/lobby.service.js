@@ -1,17 +1,15 @@
 const { HttpResponse } = require("../helpers/response.helper");
 const { userModel } = require("../schemas/user.schema");
 
-
 const lobbyPing = () => {
   return new HttpResponse(200, "pong");
 };
 
 const profile = async ( userId ) => {
-  try {
-    const user = await UserModel.findOne({ userId: userId })
-    const {nickname, profile, background, item} = user;
+  try{
+    const user = await userModel.findOne({ userId: userId });
 
-    // stage 관련 로직 추가 필요
+    const { nickname, profile, background, item } = user;
 
     return new HttpResponse(200, {
       nickname: nickname,
@@ -25,7 +23,22 @@ const profile = async ( userId ) => {
   }
 };
 
+const shop = async ( userId ) => {
+  try{
+    const user = await userModel.findOne({ userId: userId });
+    const { money, item } = user;
+
+    return new HttpResponse(200, {
+      money: money,
+      item: item,
+    })
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   lobbyPing,
-  profile
+  profile,
+  shop,
 };
