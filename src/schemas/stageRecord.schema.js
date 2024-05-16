@@ -1,20 +1,24 @@
 const mongoose = require("mongoose");
 
 const stageRecordSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-        maxlegth: 15,
-    },
-    stageId: {
-        type: String,
-    },
-    code: {
-        type: [ String ]
-    },
-    clearedAt: {
-        type: Date,
-        default: Date.now
-    }
+  userId: {
+    type: String,
+    maxlegth: 15,
+  },
+  problemId: {
+    type: Number,
+  },
+  code: {
+    type: [String],
+  },
+  clearedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  isCleared: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const stageRecordModel = mongoose.model("stageRecord", stageRecordSchema);
