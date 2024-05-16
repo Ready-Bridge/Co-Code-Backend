@@ -21,6 +21,9 @@ const shop = async (req, res, next) => {
   next(await lobbyService.shop(userId));
 };
 
+const rank = async (req, res, next) => {
+  next(await lobbyService.rank());
+}
 
 
 module.exports = {
@@ -28,4 +31,5 @@ module.exports = {
   profile,
   profileEdit,
   shop,
+  rank,
 };
