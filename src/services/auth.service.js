@@ -10,7 +10,6 @@ const authPing = () => {
 
 const login = async (userId, password) => {
   let user = await userModel.findOne({ userId: userId });
-
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return new HttpResponse(401, "WRONG_USER_INFO");
   }
