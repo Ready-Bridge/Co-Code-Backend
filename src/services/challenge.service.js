@@ -2,6 +2,7 @@ const { HttpResponse } = require("../helpers/response.helper");
 const { problemModel } = require("../schemas/problem.schema");
 
 const list = () => {
+  problemModel.find({});
   return new HttpResponse(200, "pong");
 };
 
