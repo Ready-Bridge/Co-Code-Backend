@@ -1,6 +1,6 @@
-const moongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-const problemSchema = new moongoose.Schema({
+const problemSchema = new mongoose.Schema({
   problemId: {
     type: Number,
     maxlength: 50,
@@ -12,7 +12,7 @@ const problemSchema = new moongoose.Schema({
     unique: true,
   },
   description: {
-    type: Text,
+    type: String,
   },
   category: {
     type: String,
