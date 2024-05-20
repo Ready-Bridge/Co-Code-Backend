@@ -6,12 +6,22 @@ const gamePing = (req, res, next) => {
 
 const submit = async (req, res, next) => {
   const { userId } = req.user;
-  const { problemId, code } = req.body;
+  const { problemId, code, isChallenged, isCleared } = req.body;
 
-  next(await gameService.submit(userId, problemId, code));
-}
+  next(
+    await gameService.submit(userId, problemId, code, isChallenged, isCleared)
+  );
+};
+
+const detail = async (req, res, next) => {
+  const { userId } = req.user;
+  const { problemId } = req.body;
+
+  next(await gameService.detail(userId, problemId));
+};
 
 module.exports = {
   gamePing,
   submit,
+  detail,
 };

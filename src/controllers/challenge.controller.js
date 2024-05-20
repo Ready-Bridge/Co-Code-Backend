@@ -1,9 +1,14 @@
 const challengeService = require("../services/challenge.service");
 
-const challengePing = (req, res, next) => {
-  next(challengeService.challengePing());
+const list = async (req, res, next) => {
+  next(await challengeService.list());
+};
+
+const weekly = async (req, res, next) => {
+  next(await challengeService.weekly());
 };
 
 module.exports = {
-  challengePing,
+  list,
+  weekly,
 };
