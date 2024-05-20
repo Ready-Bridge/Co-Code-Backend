@@ -32,11 +32,9 @@ const problemSchema = new mongoose.Schema({
   },
   startedAt: {
     type: Date,
-    default: Date.now,
   },
   finishedAt: {
     type: Date,
-    default: new Date("9999-12-31"),
   },
 });
 

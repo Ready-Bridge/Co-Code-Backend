@@ -1,20 +1,38 @@
 const { HttpResponse } = require("../helpers/response.helper");
 const { problemModel } = require("../schemas/problem.schema");
 
-const list = () => {
-  problemModel.find({});
-  return new HttpResponse(200, "pong");
+const list = async () => {
+  try {
+    const temp = await problemModel.find({ isChallenge: true });
+    return new HttpResponse(
+      200,
+      await problemModel.find({ isChallenge: true })
+    );
+  } catch (err) {
+    throw err;
+  }
 };
 
-const weekly = async () => {};
+const weekly = async () => {
+  try {
+    const now = new Date();
 
-const solve = async () => {};
+    const weeklyChallenge = await problemModel
+      .findOne()
+      .where("isChallenge")
+      .equals(true)
+      .where("startedAt")
+      .lte(now)
+      .where("finishedAt")
+      .gte(now);
 
-const detail = async () => {};
+    return new HttpResponse(200, weeklyChallenge);
+  } catch (err) {
+    throw err;
+  }
+};
 
 module.exports = {
   list,
-  detail,
   weekly,
-  solve,
 };

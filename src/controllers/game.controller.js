@@ -13,7 +13,15 @@ const submit = async (req, res, next) => {
   );
 };
 
+const detail = async (req, res, next) => {
+  const { userId } = req.user;
+  const { problemId } = req.body;
+
+  next(await gameService.detail(userId, problemId));
+};
+
 module.exports = {
   gamePing,
   submit,
+  detail,
 };
