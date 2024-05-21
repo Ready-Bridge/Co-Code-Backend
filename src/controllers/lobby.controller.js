@@ -21,6 +21,12 @@ const shop = async (req, res, next) => {
   next(await lobbyService.shop(userId));
 };
 
+const buy = async (req, res, next) => {
+  const { userId } = req.user;
+  const { itemId } = req.body;
+  next(await lobbyService.buy(userId, itemId));
+}
+
 const rank = async (req, res, next) => {
   next(await lobbyService.rank());
 }
@@ -31,5 +37,6 @@ module.exports = {
   profile,
   profileEdit,
   shop,
+  buy,
   rank,
 };

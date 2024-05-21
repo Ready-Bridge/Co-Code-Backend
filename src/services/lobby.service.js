@@ -1,6 +1,7 @@
 const { HttpResponse } = require("../helpers/response.helper");
 const { userModel } = require("../schemas/user.schema");
 const { problemRecordModel } = require("../schemas/problemRecord.schema");
+const { itemModel } = require("../schemas/item.schema");
 
 const lobbyPing = () => {
   return new HttpResponse(200, "pong");
@@ -53,6 +54,34 @@ const shop = async ( userId ) => {
   }
 };
 
+const buy = async ( userId, itemId ) => {
+  try {
+    const user = await userModel.findOne({ userId: userId });
+    const item = await itemModel.findOne({ itemId: itemId });
+
+    if (!user) {
+      return new HttpResponse(404, "User not found");
+    }
+
+    if (!item) {
+      return new HttpResponse(404, "Item not found");
+    }
+
+    if (user.money < item.price) {
+      return new HttpResponse(400, "Not enough money");
+    }
+
+    user.money -= item.price;
+    user.item.push(itemId);
+
+    await user.save()
+
+    return new HttpResponse(200, "Purchase successful");
+  } catch (err) {
+    throw err;
+  }
+}
+
 const rank = async () => {
   try {
     const users = await userModel.find().exec();
@@ -86,10 +115,12 @@ const rank = async () => {
   }
 }
 
+
 module.exports = {
   lobbyPing,
   profile,
   profileEdit,
   shop,
+  buy,
   rank,
 };
