@@ -3,6 +3,6 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/submit", gameController.submit);
-router.get("/realCode", gameController.gamePing);
+router.get("/detail", gameController.detail);
 
 module.exports = router;

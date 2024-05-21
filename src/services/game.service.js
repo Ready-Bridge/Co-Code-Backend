@@ -41,7 +41,25 @@ const submit = async (userId, problemId, code, isChallenged, isCleared) => {
   }
 };
 
+const detail = async (userId, problemId) => {
+  try {
+    const record = await problemRecordModel.findOne({
+      userId: userId,
+      problemId: problemId,
+    });
+
+    if (!record) {
+      return new HttpResponse(404, "GAME_DETAIL_NOT_FOUND");
+    }
+
+    return new HttpResponse(200, record);
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   gamePing,
   submit,
+  detail,
 };
