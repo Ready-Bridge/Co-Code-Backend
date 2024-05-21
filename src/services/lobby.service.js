@@ -40,6 +40,19 @@ const profileEdit = async (userId, profileId, backgroundId) => {
   }
 }
 
+const search = async ( nickname ) => {
+  try {
+    const users = await userModel.find(
+        { nickname: new RegExp(nickname, 'i') },
+        { nickname: 1, profile: 1, _id: 0 }  // 필드 선택
+    );
+
+    return new HttpResponse(200, users);
+  } catch (err) {
+    throw err;
+  }
+};
+
 const shop = async ( userId ) => {
   try{
     const user = await userModel.findOne({ userId: userId });
@@ -76,7 +89,9 @@ const buy = async ( userId, itemId ) => {
 
     await user.save()
 
-    return new HttpResponse(200, "Purchase successful");
+    return new HttpResponse(200, {
+      money: user.money,
+    });
   } catch (err) {
     throw err;
   }
@@ -120,6 +135,7 @@ module.exports = {
   lobbyPing,
   profile,
   profileEdit,
+  search,
   shop,
   buy,
   rank,

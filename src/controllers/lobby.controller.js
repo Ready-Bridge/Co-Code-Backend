@@ -16,6 +16,11 @@ const profileEdit = async (req, res, next) => {
   next(await lobbyService.profileEdit(userId, profileId, backgroundId));
 }
 
+const search = async (req, res, next) => {
+  const { nickname } = req.query;
+  next(await lobbyService.search(nickname));
+}
+
 const shop = async (req, res, next) => {
   const { userId } = req.user;
   next(await lobbyService.shop(userId));
@@ -36,6 +41,7 @@ module.exports = {
   lobbyPing,
   profile,
   profileEdit,
+  search,
   shop,
   buy,
   rank,
