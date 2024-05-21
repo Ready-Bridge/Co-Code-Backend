@@ -1,6 +1,7 @@
 const { HttpResponse } = require("../helpers/response.helper");
 const { userModel } = require("../schemas/user.schema");
 const { problemRecordModel } = require("../schemas/problemRecord.schema");
+const { itemModel } = require("../schemas/item.schema");
 
 const lobbyPing = () => {
   return new HttpResponse(200, "pong");
@@ -39,6 +40,19 @@ const profileEdit = async (userId, profileId, backgroundId) => {
   }
 }
 
+const search = async ( nickname ) => {
+  try {
+    const users = await userModel.find(
+        { nickname: new RegExp(nickname, 'i') },
+        { nickname: 1, profile: 1, _id: 0 }  // 필드 선택
+    );
+
+    return new HttpResponse(200, users);
+  } catch (err) {
+    throw err;
+  }
+};
+
 const shop = async ( userId ) => {
   try{
     const user = await userModel.findOne({ userId: userId });
@@ -52,6 +66,36 @@ const shop = async ( userId ) => {
     throw err;
   }
 };
+
+const buy = async ( userId, itemId ) => {
+  try {
+    const user = await userModel.findOne({ userId: userId });
+    const item = await itemModel.findOne({ itemId: itemId });
+
+    if (!user) {
+      return new HttpResponse(404, "User not found");
+    }
+
+    if (!item) {
+      return new HttpResponse(404, "Item not found");
+    }
+
+    if (user.money < item.price) {
+      return new HttpResponse(400, "Not enough money");
+    }
+
+    user.money -= item.price;
+    user.item.push(itemId);
+
+    await user.save()
+
+    return new HttpResponse(200, {
+      money: user.money,
+    });
+  } catch (err) {
+    throw err;
+  }
+}
 
 const rank = async () => {
   try {
@@ -86,10 +130,13 @@ const rank = async () => {
   }
 }
 
+
 module.exports = {
   lobbyPing,
   profile,
   profileEdit,
+  search,
   shop,
+  buy,
   rank,
 };
