@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   },
   money: {
     type: Number,
-    default: 0,
+    default: 50000000,
   },
   item: {
     type: Array,
