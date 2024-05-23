@@ -3,6 +3,7 @@ const router = express.Router();
 const lobbyController = require("../controllers/lobby.controller");
 
 router.get("/profile", lobbyController.profile);
+router.get("/othersProfile", lobbyController.othersProfile);
 router.post("/profileEdit", lobbyController.profileEdit);
 router.get("/search", lobbyController.search);
 router.get("/shop", lobbyController.shop);

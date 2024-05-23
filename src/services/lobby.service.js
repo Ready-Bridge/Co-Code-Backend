@@ -24,6 +24,22 @@ const profile = async ( userId ) => {
   }
 };
 
+const othersProfile = async ( ninckname ) => {
+  try {
+    const user = await userModel.findOne({ nickname: ninckname });
+
+    const { nickname, profile, background } = user;
+
+    return new HttpResponse(200, {
+      nickname: nickname,
+      profile: profile,
+      background: background,
+    });
+  } catch (error) {
+    throw err;
+  }
+}
+
 const profileEdit = async (userId, profileId, backgroundId) => {
   try {
     await userModel.updateOne(
@@ -134,6 +150,7 @@ const rank = async () => {
 module.exports = {
   lobbyPing,
   profile,
+  othersProfile,
   profileEdit,
   search,
   shop,
