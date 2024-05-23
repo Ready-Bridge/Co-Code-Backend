@@ -22,11 +22,11 @@ const userSchema = new mongoose.Schema({
   },
   profile: {
     type: String,
-    default: 0,
+    default: "profile0",
   },
   background: {
     type: String,
-    default: 0,
+    default: "background0",
   },
   money: {
     type: Number,
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
   },
   item: {
     type: Array,
-    default: [],
+    default: ["profile0", "background0"],
   },
 });
 
