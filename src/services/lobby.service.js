@@ -150,11 +150,13 @@ const rank = async () => {
   }
 };
 
+// 로그인한 유저가 푼 일반 문제의 아이디 반환
 const problemList = async (userId) => {
   const allProblem = await problemRecordModel.find(
     {
       userId: userId,
       isCleared: true,
+      isChallenged: false,
     },
     {
       problemId: 1,
