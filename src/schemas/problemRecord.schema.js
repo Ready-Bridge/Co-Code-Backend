@@ -19,6 +19,10 @@ const problemRecordSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isChallenged: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const problemRecordModel = mongoose.model("problemRecord", problemRecordSchema);

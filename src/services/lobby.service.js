@@ -7,8 +7,8 @@ const lobbyPing = () => {
   return new HttpResponse(200, "pong");
 };
 
-const profile = async ( userId ) => {
-  try{
+const profile = async (userId) => {
+  try {
     const user = await userModel.findOne({ userId: userId });
 
     const { nickname, profile, background, item } = user;
@@ -24,7 +24,7 @@ const profile = async ( userId ) => {
   }
 };
 
-const othersProfile = async ( ninckname ) => {
+const othersProfile = async (ninckname) => {
   try {
     const user = await userModel.findOne({ nickname: ninckname });
 
@@ -38,29 +38,29 @@ const othersProfile = async ( ninckname ) => {
   } catch (error) {
     throw err;
   }
-}
+};
 
 const profileEdit = async (userId, profileId, backgroundId) => {
   try {
     await userModel.updateOne(
-        { userId: userId },
-        {
-          profile: profileId,
-          background: backgroundId,
-        }
+      { userId: userId },
+      {
+        profile: profileId,
+        background: backgroundId,
+      }
     );
 
-    return new HttpResponse(200, 'profileEdit Success');
+    return new HttpResponse(200, "profileEdit Success");
   } catch (err) {
     throw err;
   }
-}
+};
 
-const search = async ( nickname ) => {
+const search = async (nickname) => {
   try {
     const users = await userModel.find(
-        { nickname: new RegExp(nickname, 'i') },
-        { nickname: 1, profile: 1, _id: 0 }  // 필드 선택
+      { nickname: new RegExp(nickname, "i") },
+      { nickname: 1, profile: 1, _id: 0 } // 필드 선택
     );
 
     return new HttpResponse(200, users);
@@ -69,21 +69,21 @@ const search = async ( nickname ) => {
   }
 };
 
-const shop = async ( userId ) => {
-  try{
+const shop = async (userId) => {
+  try {
     const user = await userModel.findOne({ userId: userId });
     const { money, item } = user;
 
     return new HttpResponse(200, {
       money: money,
       item: item,
-    })
+    });
   } catch (err) {
     throw err;
   }
 };
 
-const buy = async ( userId, itemId ) => {
+const buy = async (userId, itemId) => {
   try {
     const user = await userModel.findOne({ userId: userId });
     const item = await itemModel.findOne({ itemId: itemId });
@@ -103,7 +103,7 @@ const buy = async ( userId, itemId ) => {
     user.money -= item.price;
     user.item.push(itemId);
 
-    await user.save()
+    await user.save();
 
     return new HttpResponse(200, {
       money: user.money,
@@ -111,23 +111,27 @@ const buy = async ( userId, itemId ) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 const rank = async () => {
   try {
     const users = await userModel.find().exec();
 
-    const userSolved = await Promise.all(users.map(async (user) => {
-      const clearedProblems = await problemRecordModel.countDocuments({
-        userId: user.userId,
-        isCleared: true
-      }).exec();
-      return {
-        nickname: user.nickname,
-        profileId: user.profile,
-        clearedProblems: clearedProblems
-      };
-    }));
+    const userSolved = await Promise.all(
+      users.map(async (user) => {
+        const clearedProblems = await problemRecordModel
+          .countDocuments({
+            userId: user.userId,
+            isCleared: true,
+          })
+          .exec();
+        return {
+          nickname: user.nickname,
+          profileId: user.profile,
+          clearedProblems: clearedProblems,
+        };
+      })
+    );
 
     userSolved.sort((a, b) => b.clearedProblems - a.clearedProblems);
 
@@ -135,7 +139,7 @@ const rank = async () => {
       rank: index + 1,
       nickname: user.nickname,
       profileId: user.profileId,
-      clearedProblems: user.clearedProblems
+      clearedProblems: user.clearedProblems,
     }));
 
     return new HttpResponse(200, {
@@ -144,8 +148,26 @@ const rank = async () => {
   } catch (err) {
     throw err;
   }
-}
+};
 
+const problemList = async (userId) => {
+  const allProblem = await problemRecordModel.find(
+    {
+      userId: userId,
+      isCleared: true,
+    },
+    {
+      problemId: 1,
+      _id: 0,
+    }
+  );
+
+  // problemId 필드는 포함하고 기본적으로 포함되는 _id 필드는 제외해서 반환
+
+  const problemList = allProblem.map((problem) => problem.problemId);
+
+  return new HttpResponse(200, problemList);
+};
 
 module.exports = {
   lobbyPing,
@@ -156,4 +178,5 @@ module.exports = {
   shop,
   buy,
   rank,
+  problemList,
 };
