@@ -9,9 +9,6 @@ router.get("/search", lobbyController.search);
 router.get("/shop", lobbyController.shop);
 router.post("/buy", lobbyController.buy);
 router.get("/rank", lobbyController.rank);
-router.post("/qa", lobbyController.lobbyPing);
-router.get("/qa", lobbyController.lobbyPing);
-router.get("/search", lobbyController.lobbyPing);
-
+router.get("/problemList", lobbyController.problemList);
 
 module.exports = router;
