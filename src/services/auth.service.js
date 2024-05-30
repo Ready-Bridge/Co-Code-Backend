@@ -19,6 +19,7 @@ const login = async (userId, password) => {
       nickname: user.nickname,
       email: user.email,
     }),
+    tutorial: user.tutorial,
   });
 };
 
