@@ -1,5 +1,6 @@
 const { HttpResponse } = require("../helpers/response.helper");
 const { problemRecordModel } = require("../schemas/problemRecord.schema");
+const {userModel} = require("../schemas/user.schema");
 
 const gamePing = () => {
   return new HttpResponse(200, "pong");
@@ -56,8 +57,28 @@ const detail = async (userId, problemId) => {
   }
 };
 
+const tutorial = async ( userId ) => {
+  try {
+    const user = await userModel.findOne({ userId: userId });
+
+    if (!user) {
+      return new HttpResponse(404, "USER_NOT_FOUND");
+    }
+
+    user.tutorial = true;
+    await user.save();
+
+    return new HttpResponse(200, {
+      tutorial: user.tutorial,
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   gamePing,
   submit,
   detail,
+  tutorial,
 };

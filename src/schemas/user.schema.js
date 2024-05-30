@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema({
     type: Array,
     default: ["profile0", "background0"],
   },
+  tutorial: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const userModel = mongoose.model("User", userSchema);
