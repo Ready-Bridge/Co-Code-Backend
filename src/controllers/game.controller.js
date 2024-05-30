@@ -20,8 +20,15 @@ const detail = async (req, res, next) => {
   next(await gameService.detail(userId, problemId));
 };
 
+const tutorial = async (req, res, next) => {
+  const { userId } = req.user;
+
+  next(await gameService.tutorial(userId));
+}
+
 module.exports = {
   gamePing,
   submit,
   detail,
+  tutorial,
 };
